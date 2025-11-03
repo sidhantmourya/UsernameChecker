@@ -1,0 +1,287 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_IN_PAGE_ERROR (0xc0000006) at pc=0x00007ff8062d4400, pid=17744, tid=19204
+#
+# JRE version:  (21.0.7+6) (build )
+# Java VM: OpenJDK 64-Bit Server VM (21.0.7+6-LTS, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# Problematic frame:
+# V  [jvm.dll+0x154400]
+#
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Dclassworlds.conf=D:\Codes\apache-maven-3.9.9-bin\apache-maven-3.9.9\bin\m2.conf -Dmaven.home=D:\Codes\apache-maven-3.9.9-bin\apache-maven-3.9.9 -Dlibrary.jansi.path=D:\Codes\apache-maven-3.9.9-bin\apache-maven-3.9.9\lib\jansi-native -Dmaven.multiModuleProjectDirectory=D:\Codes\UsernameChecker org.codehaus.plexus.classworlds.launcher.Launcher clean package -DskipTests
+
+Host: Intel(R) Core(TM) i3-8100 CPU @ 3.60GHz, 4 cores, 15G,  Windows 10 , 64 bit Build 19041 (10.0.19041.4957)
+Time: Sun Nov  2 20:04:21 2025 India Standard Time elapsed time: 5.515208 seconds (0d 0h 0m 5s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001c2c70ffd50):  JavaThread "Unknown thread" [_thread_in_vm, id=19204, stack(0x0000000100600000,0x0000000100700000) (1024K)]
+
+Stack: [0x0000000100600000,0x0000000100700000],  sp=0x00000001006ff8d8,  free space=1022k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x154400]
+
+
+siginfo: EXCEPTION_IN_PAGE_ERROR (0xc0000006), data execution prevention violation at address 0x00007ff8062d4400
+
+
+Registers:
+RAX=0x0000000000000003, RBX=0x0000000000000003, RCX=0x0000000000000002, RDX=0x0000000000000000
+RSP=0x00000001006ff8d8, RBP=0x00000001006ffa50, RSI=0x000001c2c70ffd00, RDI=0x0000000000000001
+R8 =0x000001c2c7051140, R9 =0x0000000000000001, R10=0x0000000000008000, R11=0x00000001006ff340
+R12=0x0000000000000001, R13=0x000001c2c70e6280, R14=0x0000000000000000, R15=0x00000001006ffd08
+RIP=0x00007ff8062d4400, EFLAGS=0x0000000000010202
+
+XMM[0]=0x0000000000000000 0x0000000000000000
+XMM[1]=0x0000000000000000 0x0000000000000000
+XMM[2]=0x0000000000000000 0x0000000000000000
+XMM[3]=0x0000000000000000 0x0000000000000000
+XMM[4]=0x0000000000000000 0x0000000000000000
+XMM[5]=0x0000000000000000 0x0000000000000000
+XMM[6]=0x0000000000000000 0x0000000000000000
+XMM[7]=0x0000000000000000 0x0000000000000000
+XMM[8]=0x0000000000000000 0x0000000000000000
+XMM[9]=0x0000000000000000 0x0000000000000000
+XMM[10]=0x0000000000000000 0x0000000000000000
+XMM[11]=0x0000000000000000 0x0000000000000000
+XMM[12]=0x0000000000000000 0x0000000000000000
+XMM[13]=0x0000000000000000 0x0000000000000000
+XMM[14]=0x0000000000000000 0x0000000000000000
+XMM[15]=0x0000000000000000 0x0000000000000000
+  MXCSR=0x00001fa0
+
+
+Top of Stack: (sp=0x00000001006ff8d8)
+0x00000001006ff8d8:   00007ff8063c4179 0000000000000002
+0x00000001006ff8e8:   000001c2c70ffd00 0000000000000000
+0x00000001006ff8f8:   000001c2c70ffd50 00000001006ffc18
+0x00000001006ff908:   0000000000000000 000001c2c70ffd50
+0x00000001006ff918:   00007ff80653c4ed 000001c2c70ffd50
+0x00000001006ff928:   0000000000000000 00000001006ffa50
+0x00000001006ff938:   00000001006ffd08 0000000000000000
+0x00000001006ff948:   00007ff8069da743 0000000000000000
+0x00000001006ff958:   0000000000000000 0000000000000001
+0x00000001006ff968:   0000000000000001 00000001006ffb70
+0x00000001006ff978:   00007ff9112a742b 0000000000000001
+0x00000001006ff988:   0000019a44fd83c7 0000000000000001
+0x00000001006ff998:   00000001006ffb48 0000000000000000
+0x00000001006ff9a8:   000001c2c70f1540 00007ff90f030100
+0x00000001006ff9b8:   0000000000000000 00007ff90c7900e8
+0x00000001006ff9c8:   0000000000000000 000001c2c70ed760
+0x00000001006ff9d8:   00007ff806c2d490 0000000000000000
+0x00000001006ff9e8:   004f0044004e0049 0000000000530000
+0x00000001006ff9f8:   000001c2c70f1540 00007ff90f03d420
+0x00000001006ffa08:   000001c2c70d7990 000001c2c70f1540
+0x00000001006ffa18:   006f006300700070 0064002e00650072
+0x00000001006ffa28:   00000000006c006c 0000000000000000
+0x00000001006ffa38:   0000000000000000 0000000000000000
+0x00000001006ffa48:   0000000000000000 000001c2c70ed760
+0x00000001006ffa58:   0000000000000000 0000000000000000
+0x00000001006ffa68:   0000000000000000 0000000000000000
+0x00000001006ffa78:   0000000000000000 0000000000000000
+0x00000001006ffa88:   0000000000000000 0000000000000000
+0x00000001006ffa98:   0000000000000000 0000000000000000
+0x00000001006ffaa8:   0000000000000000 00004fb241f49248
+0x00000001006ffab8:   0000000000000000 0000000000000000
+0x00000001006ffac8:   0000000000000009 00007ff90f03d420 
+
+Instructions: (pc=0x00007ff8062d4400)
+0x00007ff8062d4300:   48 8b 0d 59 3d ae 00 48 8d 15 52 c2 89 00 0f 28
+0x00007ff8062d4310:   d6 66 49 0f 7e f0 e8 45 bc 57 00 0f 28 74 24 40
+0x00007ff8062d4320:   0f 28 7c 24 30 44 0f 28 44 24 20 48 83 c4 58 c3
+0x00007ff8062d4330:   48 89 5c 24 08 48 89 74 24 10 57 48 83 ec 20 8b
+0x00007ff8062d4340:   fa 48 8b f1 33 d2 b9 54 01 00 00 e8 b0 fb 5c 00
+0x00007ff8062d4350:   41 b8 aa 00 00 00 48 8d 4e 60 48 8b d0 e8 1e a8
+0x00007ff8062d4360:   0d 00 48 8d 56 08 41 b8 cc cc 00 00 48 8b ce e8
+0x00007ff8062d4370:   1c a7 0d 00 8b 46 78 2b 46 60 44 6b c7 1c 41 81
+0x00007ff8062d4380:   c0 d1 00 00 00 44 3b c0 7c 12 32 c0 48 8b 5c 24
+0x00007ff8062d4390:   30 48 8b 74 24 38 48 83 c4 20 5f c3 48 8d 96 b8
+0x00007ff8062d43a0:   00 00 00 48 8b ce e8 e5 a6 0d 00 48 8b 5c 24 30
+0x00007ff8062d43b0:   b0 01 48 8b 74 24 38 48 83 c4 20 5f c3 cc cc cc
+0x00007ff8062d43c0:   48 8d 05 01 c2 89 00 c6 41 10 01 48 89 01 33 c0
+0x00007ff8062d43d0:   89 41 08 89 41 0c 88 41 28 48 89 41 18 48 89 41
+0x00007ff8062d43e0:   30 88 41 48 48 89 41 38 48 89 41 50 48 89 41 58
+0x00007ff8062d43f0:   48 8d 05 49 c2 89 00 48 89 01 48 8b c1 c3 cc cc
+0x00007ff8062d4400:   b8 cc cc 08 00 c3 cc cc cc cc cc cc cc cc cc cc
+0x00007ff8062d4410:   48 83 ec 28 ba a7 00 00 00 48 8d 0d e0 c1 89 00
+0x00007ff8062d4420:   e8 6b b3 12 00 cc cc cc cc cc cc cc cc cc cc cc
+0x00007ff8062d4430:   40 53 55 56 57 41 54 41 55 41 56 41 57 48 81 ec
+0x00007ff8062d4440:   28 03 00 00 48 8b 05 1d 0e b0 00 48 33 c4 48 89
+0x00007ff8062d4450:   84 24 10 03 00 00 0f b6 84 24 90 03 00 00 4c 8b
+0x00007ff8062d4460:   e1 8b 0d 01 9d b8 00 4c 8b ea 88 44 24 40 48 8b
+0x00007ff8062d4470:   84 24 98 03 00 00 48 89 44 24 48 65 48 8b 04 25
+0x00007ff8062d4480:   58 00 00 00 bf 70 00 00 00 44 89 4c 24 44 4c 89
+0x00007ff8062d4490:   44 24 50 48 8b 1c c8 80 3c 1f 00 75 05 e8 de 2b
+0x00007ff8062d44a0:   7f 00 80 3c 1f 00 be 20 00 00 00 48 8b 04 1e 4c
+0x00007ff8062d44b0:   8b b8 80 06 00 00 75 05 e8 c3 2b 7f 00 48 8b 04
+0x00007ff8062d44c0:   1e 48 8d 4c 24 60 4c 8b 4c 24 50 4d 8b c5 49 8b
+0x00007ff8062d44d0:   d4 48 8b 98 18 03 00 00 48 8b 44 24 48 48 89 44
+0x00007ff8062d44e0:   24 38 0f b6 44 24 40 48 8b 73 10 48 8b 7b 18 48
+0x00007ff8062d44f0:   8b 6b 20 4c 8b 73 28 88 44 24 30 8b 44 24 44 4c 
+
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00007ff806dba0c8, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+Total: 0
+
+Other Threads:
+
+=>0x000001c2c70ffd50 (exited) JavaThread "Unknown thread"    [_thread_in_vm, id=19204, stack(0x0000000100600000,0x0000000100700000) (1024K)]
+Total: 1
+
+Threads with active compile tasks:
+Total: 0
+
+VM state: not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap address: 0x0000000000000000, size: 0 MB, Compressed Oops mode: 32-bit
+
+CDS archive(s) mapped at: [0x0000000000000000-0x0000000000000000-0x0000000000000000), size 0, SharedBaseAddress: 0x0000000800000000, ArchiveRelocationMode: 1.
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0, Narrow klass range: 0x0
+
+GC Precious Log:
+<Not initialized>
+
+Dll operation events (1 events):
+Event: 0.188 Loaded shared library D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\java.dll
+
+Deoptimization events (0 events):
+No events
+
+Classes loaded (0 events):
+No events
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+ZGC Phase Switch (0 events):
+No events
+
+VM Operations (0 events):
+No events
+
+Memory protections (0 events):
+No events
+
+Nmethod flushes (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff6cd440000 - 0x00007ff6cd44e000 	D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\java.exe
+0x00007ff911290000 - 0x00007ff911488000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ff90f400000 - 0x00007ff90f4c2000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ff90e980000 - 0x00007ff90ec7e000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ff90ef80000 - 0x00007ff90f080000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ff8da7a0000 - 0x00007ff8da7b8000 	D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\jli.dll
+0x00007ff910e20000 - 0x00007ff910fbd000 	C:\WINDOWS\System32\USER32.dll
+0x00007ff90ef50000 - 0x00007ff90ef72000 	C:\WINDOWS\System32\win32u.dll
+0x00007ff90f2b0000 - 0x00007ff90f2db000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ff90f190000 - 0x00007ff90f2a7000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ff90f080000 - 0x00007ff90f11d000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ff8f8670000 - 0x00007ff8f890a000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.4355_none_60b8b9eb71f62e16\COMCTL32.dll
+0x00007ff8d6e10000 - 0x00007ff8d6e2e000 	D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\VCRUNTIME140.dll
+0x00007ff90f4d0000 - 0x00007ff90f56e000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ff910540000 - 0x00007ff91056f000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ff8f0750000 - 0x00007ff8f075c000 	D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\vcruntime140_1.dll
+0x00007ff84e750000 - 0x00007ff84e7dd000 	D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\msvcp140.dll
+0x00007ff806180000 - 0x00007ff806f10000 	D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\server\jvm.dll
+0x00007ff90f5e0000 - 0x00007ff90f692000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ff9102f0000 - 0x00007ff910390000 	C:\WINDOWS\System32\sechost.dll
+0x00007ff90fb90000 - 0x00007ff90fcb3000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ff90ee70000 - 0x00007ff90ee97000 	C:\WINDOWS\System32\bcrypt.dll
+0x00007ff911180000 - 0x00007ff9111eb000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ff90de80000 - 0x00007ff90decb000 	C:\WINDOWS\SYSTEM32\POWRPROF.dll
+0x00007ff909620000 - 0x00007ff90962a000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ff8fdd00000 - 0x00007ff8fdd27000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ff90dcf0000 - 0x00007ff90dd02000 	C:\WINDOWS\SYSTEM32\UMPDC.dll
+0x00007ff90c790000 - 0x00007ff90c7a2000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x00007ff8e15a0000 - 0x00007ff8e15aa000 	D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\jimage.dll
+0x00007ff8faa10000 - 0x00007ff8fabf4000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x00007ff8ec2b0000 - 0x00007ff8ec2e4000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x00007ff90ec80000 - 0x00007ff90ed02000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ff8d6df0000 - 0x00007ff8d6e0f000 	D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\java.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.4355_none_60b8b9eb71f62e16;D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin\server
+
+VM Arguments:
+jvm_args: -Dclassworlds.conf=D:\Codes\apache-maven-3.9.9-bin\apache-maven-3.9.9\bin\m2.conf -Dmaven.home=D:\Codes\apache-maven-3.9.9-bin\apache-maven-3.9.9 -Dlibrary.jansi.path=D:\Codes\apache-maven-3.9.9-bin\apache-maven-3.9.9\lib\jansi-native -Dmaven.multiModuleProjectDirectory=D:\Codes\UsernameChecker 
+java_command: org.codehaus.plexus.classworlds.launcher.Launcher clean package -DskipTests
+java_class_path (initial): D:\Codes\apache-maven-3.9.9-bin\apache-maven-3.9.9\boot\plexus-classworlds-2.8.0.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     uint ConcGCThreads                            = 1                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 4                                         {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 267353152                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 4277650432                                {product} {ergonomic}
+   size_t MinHeapSize                              = 6815736                                   {product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags foldmultilines=false
+ #1: stderr all=off uptime,level,tags foldmultilines=false
+
+Environment Variables:
+JAVA_HOME=D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6
+PATH=%JAVA_HOME%\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Users\Sidhant Mourya\Downloads\Compressed\platform-tools_r29.0.4-windows\platform-tools;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Python\Python37;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\dotnet\;C:\Users\Sidhant Mourya\Downloads\Compressed\platform-tools_r29.0.4-windows\platform-tools\adb.exe;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET Web Pages\v1.0\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\Python\Python37\Scripts;D:\scrcpy-win64-v1.17\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;D:\platform-tools;C:\Program Files\Git\cmd;C:\minikube;D:\Softwares\kubectl.exe;D:\Codes\apache-maven-3.9.9-bin\apache-maven-3.9.9\bin;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files\nodejs\;C:\Program Files\Docker\Docker\resources\bin;C:\Users\Sidhant 2\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.3.2.1\bin;;D:\Codes\apache-maven-3.9.9-bin\apache-maven-3.9.9\bin;C:\Users\Sidhant 2\AppData\Local\GitHubDesktop\bin;D:\Codes\OpenJDK21U-jdk_x64_windows_hotspot_21.0.7_6\jdk-21.0.7+6\bin;C:\Users\Sidhant 2\AppData\Roaming\npm;
+USERNAME=Sidhant 2
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 158 Stepping 11, GenuineIntel
+TMP=C:\Users\SIDHAN~2\AppData\Local\Temp
+TEMP=C:\Users\SIDHAN~2\AppData\Local\Temp
+
+
+
+
+Periodic native trim disabled
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 10 , 64 bit Build 19041 (10.0.19041.4957)
+OS uptime: 1 days 22:37 hours
+
+CPU: total 4 (initial active 4) 
+Processor Information for the first 4 processors :
+  Max Mhz: 3600, Current Mhz: 3600, Mhz Limit: 3600
+
+Memory: 4k page, system-wide physical 16317M (2997M free)
+TotalPageFile size 38814M (AvailPageFile size 13863M)
+current process WorkingSet (physical memory assigned to process): 8M, peak: 8M
+current process commit charge ("private bytes"): 3M, peak: 3M
+
+vm_info: OpenJDK 64-Bit Server VM (21.0.7+6-LTS) for windows-amd64 JRE (21.0.7+6-LTS), built on 2025-04-15T00:00:00Z by "admin" with MS VC++ 17.7 (VS2022)
+
+END.

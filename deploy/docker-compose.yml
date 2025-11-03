@@ -1,0 +1,147 @@
+services:
+  cassandra-db1:
+    image: cassandra:4.0
+    container_name: cassandra-db1
+    ports:
+      - "9042:9042"
+      - "7000:7000"
+      - "7001:7001"
+      - "7199:7199"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=UserNameCluster
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_SEEDS=cassandra-db2,cassandra-db3
+    volumes:
+      - cassandra-data4:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe cluster'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - username-network
+    mem_limit: 4G
+
+  cassandra-db2:
+    image: cassandra:4.0
+    container_name: cassandra-db2
+    environment:
+      - CASSANDRA_CLUSTER_NAME=UserNameCluster
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_SEEDS=cassandra-db1,cassandra-db3
+    volumes:
+      - cassandra-data5:/var/lib/cassandra
+    healthcheck:
+      test: [ "CMD-SHELL", "cqlsh -e 'describe cluster'" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - username-network
+    mem_limit: 4G
+    depends_on:
+      - cassandra-db1
+
+  cassandra-db3:
+    image: cassandra:4.0
+    container_name: cassandra-db3
+
+    healthcheck:
+      test: [ "CMD-SHELL", "cqlsh -e 'describe cluster'" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+    environment:
+      - CASSANDRA_CLUSTER_NAME=UserNameCluster
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_SEEDS=cassandra-db1,cassandra-db2
+    volumes:
+      - cassandra-data6:/var/lib/cassandra
+    networks:
+      - username-network
+    mem_limit: 4G
+    depends_on:
+      - cassandra-db2
+
+
+
+
+  cassandra-init:
+    image: cassandra:4.0
+    container_name: cassandra-init
+    depends_on:
+      cassandra-db1:
+        condition: service_healthy
+      cassandra-db2:
+        condition: service_healthy
+      cassandra-db3:
+        condition: service_healthy
+    command: >
+      /bin/bash -c "echo \"CREATE KEYSPACE IF NOT EXISTS userKeySpace 
+      WITH replication = {
+        'class': 'NetworkTopologyStrategy', 
+        'datacenter1': 3
+      } 
+      AND durable_writes = true;\" 
+      | cqlsh cassandra-db1"
+    networks:
+      - username-network
+
+
+
+  username-service:
+    container_name: user-name-service
+    build: ../
+    depends_on:
+      cassandra-db1:
+        condition: service_healthy
+      cassandra-db2:
+        condition: service_healthy
+      cassandra-db3:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      cassandra-init:
+        condition: service_completed_successfully
+    ports:
+      - "8081:8081"
+    environment:
+      CONTACT_POINTS: cassandra-db1, cassandra-db2, cassandra-db3
+      DB_PORT: 9042
+      MY_KEYSPACE: userKeySpace
+      LOCAL_DATACENTER: datacenter1
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    restart: on-failure
+    networks:
+      - username-network
+    mem_limit: 2G
+
+  redis:
+    image: redis:7
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - username-network
+    mem_limit: 2G
+
+networks:
+  username-network:
+    name: username-network
+
+volumes:
+  cassandra-data4:
+  cassandra-data5:
+  cassandra-data6:
+  app-logs:

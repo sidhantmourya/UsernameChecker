@@ -1,0 +1,40 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: UsernameChecker
+
+  cassandra:
+    contact-points: ${CONTACT_POINTS}
+    port: ${DB_PORT}
+    keyspace-name: ${MY_KEYSPACE}
+    schema-action: create_if_not_exists
+    local-datacenter: ${LOCAL_DATACENTER}
+    request:
+      timeout: 10s
+  redis:
+    host: ${REDIS_HOST}
+    port: 6379
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,loggers
+    endpoint:
+      health:
+        show-details: always
+      loggers:
+        enabled: true
+
+logging:
+  file:
+    path: /app/logs
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{traceId:-}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level [%X{traceId:-}] %logger{36} - %msg%n"
+  level:
+    com.user.checker.UsernameChecker: DEBUG
+    com.datastax.driver.core.QueryLogger: DEBUG
+    com.datastax.driver.core.RequestHandler: TRACE
