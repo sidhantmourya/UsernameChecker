@@ -3,6 +3,7 @@ package com.user.checker.UsernameChecker.component;
 import com.user.checker.UsernameChecker.bsl.Trie;
 import com.user.checker.UsernameChecker.entity.UsersDb;
 import com.user.checker.UsernameChecker.repository.UsersDBRepository;
+import com.user.checker.UsernameChecker.repository.UsersDBRepositoryCustom;
 import jakarta.annotation.PostConstruct;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;

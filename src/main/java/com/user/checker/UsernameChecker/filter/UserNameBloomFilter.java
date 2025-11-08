@@ -4,6 +4,7 @@ import com.datastax.oss.driver.shaded.guava.common.hash.BloomFilter;
 import com.datastax.oss.driver.shaded.guava.common.hash.Funnels;
 import com.user.checker.UsernameChecker.entity.UsersDb;
 import com.user.checker.UsernameChecker.repository.UsersDBRepository;
+import com.user.checker.UsernameChecker.repository.UsersDBRepositoryCustom;
 import jakarta.annotation.PostConstruct;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;

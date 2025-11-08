@@ -12,7 +12,16 @@ spring:
     schema-action: create_if_not_exists
     local-datacenter: ${LOCAL_DATACENTER}
     request:
-      timeout: 10s
+      timeout: 30s
+      consistency: ONE
+    connection:
+      pool:
+        local:
+          size: 4
+        remote:
+          size: 2
+      connect-timeout: 10s
+      init-query-timeout: 10s
   redis:
     host: ${REDIS_HOST}
     port: 6379

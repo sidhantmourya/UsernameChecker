@@ -5,9 +5,10 @@ import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UsersDBRepository extends CassandraRepository<UsersDb, String> {
+public interface UsersDBRepository extends CassandraRepository<UsersDb, String>, UsersDBRepositoryCustom {
 
     UsersDb findByUsername(String username);
+
 
 //    List<String> findAllUsers();
 
