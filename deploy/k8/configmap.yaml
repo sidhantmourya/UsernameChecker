@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  labels:
+    app: username-checker
+data:
+  CASSANDRA_CLUSTER_NAME: "UserNameCluster"
+  CASSANDRA_DC: "datacenter1"
+  CASSANDRA_ENDPOINT_SNITCH: "GossipingPropertyFileSnitch"
+  CASSANDRA_SEEDS: "cassandra-0.cassandra.default.svc.cluster.local,cassandra-1.cassandra.default.svc.cluster.local"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  DB_PORT: "9042"
+  KEYSPACE: "userKeySpace"

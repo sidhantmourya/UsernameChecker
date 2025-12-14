@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: username-service
+  labels:
+    app: username-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: username-service
+  template:
+    metadata:
+      labels:
+        app: username-service
+    spec:
+      containers:
+      - name: username-service
+        image: sidboy/username-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
+        env:
+        - name: CONTACT_POINTS
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: CASSANDRA_SEEDS
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DB_PORT
+        - name: LOCAL_DATACENTER
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: CASSANDRA_DC
+        - name: MY_KEYSPACE
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: KEYSPACE
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: REDIS_PORT
+        - name: SPRING_DATA_CASSANDRA_SCHEMA_ACTION
+          value: "create_if_not_exists"
+        livenessProbe:
+          tcpSocket:
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          tcpSocket:
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"

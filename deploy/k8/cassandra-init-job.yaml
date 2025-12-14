@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-init
+  labels:
+    app: cassandra-init
+spec:
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      containers:
+      - name: cassandra-init
+        image: cassandra:4.0
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "Waiting for Cassandra to be ready..."
+          until cqlsh cassandra-0.cassandra.default.svc.cluster.local -e "describe cluster"; do 
+            echo "Cassandra not ready, sleeping..."
+            sleep 5
+          done
+          echo "Creating Keyspace..."
+          echo "CREATE KEYSPACE IF NOT EXISTS userKeySpace WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': 3} AND durable_writes = true;" | cqlsh cassandra-0.cassandra.default.svc.cluster.local
+          echo "Keyspace created."
+          
+          echo "Creating Tables..."
+          echo "CREATE TABLE IF NOT EXISTS userKeySpace.user (username text PRIMARY KEY, uuid bigint, email text, created_at date);" | cqlsh cassandra-0.cassandra.default.svc.cluster.local
+          echo "Table 'user' created."
+      restartPolicy: OnFailure
