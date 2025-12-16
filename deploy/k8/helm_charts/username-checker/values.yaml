@@ -1,0 +1,82 @@
+# Default values for username-checker.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global settings
+global:
+  # Common labels or annotations can be placed here if needed
+  extraLabels: {}
+
+# Cassandra Configuration
+cassandra:
+  image:
+    repository: cassandra
+    tag: "4.0"
+    pullPolicy: IfNotPresent
+  replicaCount: 4
+  resources:
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+    requests:
+      memory: 1Gi
+      cpu: 500m
+  persistence:
+    storageClass: "" # Leave empty to use default
+    size: 1Gi
+  config:
+    clusterName: "UserNameCluster"
+    dc: "datacenter1"
+    endpointSnitch: "GossipingPropertyFileSnitch"
+    maxHeapSize: "1024M"
+    heapNewSize: "256M"
+
+# Redis Configuration
+redis:
+  image:
+    repository: redis
+    tag: "7"
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  resources:
+    limits:
+      memory: 256Mi
+      cpu: 500m
+    requests:
+      memory: 128Mi
+      cpu: 250m
+  service:
+    port: 6379
+
+# Username Service Configuration
+usernameService:
+  image:
+    repository: sidboy/username-service
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "" 
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 2
+  service:
+    type: LoadBalancer
+    port: 8081
+  resources:
+    limits:
+      memory: 512Mi
+      cpu: 500m
+    requests:
+      memory: 256Mi
+      cpu: 250m
+  env:
+    # Keyspace and DB settings
+    keyspace: "userKeySpace"
+    dbPort: "9042"
+    schemaAction: "create_if_not_exists"
+
+# ConfigMap settings
+configMap:
+  name: app-config

@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "username-checker.fullname" . }}-cassandra
+  labels:
+    {{- include "username-checker.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "username-checker.fullname" . }}-cassandra
+  replicas: {{ .Values.cassandra.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "username-checker.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: cassandra
+  template:
+    metadata:
+      labels:
+        {{- include "username-checker.labels" . | nindent 8 }}
+        app.kubernetes.io/component: cassandra
+    spec:
+      terminationGracePeriodSeconds: 1800
+      containers:
+      - name: cassandra
+        image: "{{ .Values.cassandra.image.repository }}:{{ .Values.cassandra.image.tag }}"
+        imagePullPolicy: {{ .Values.cassandra.image.pullPolicy }}
+        ports:
+        - containerPort: 7000
+          name: intra-node
+        - containerPort: 7001
+          name: tls-intra-node
+        - containerPort: 7199
+          name: jmx
+        - containerPort: 9042
+          name: cql
+        resources:
+          {{- toYaml .Values.cassandra.resources | nindent 10 }}
+        env:
+          - name: CASSANDRA_CLUSTER_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.configMap.name }}
+                key: CASSANDRA_CLUSTER_NAME
+          - name: CASSANDRA_DC
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.configMap.name }}
+                key: CASSANDRA_DC
+          - name: CASSANDRA_ENDPOINT_SNITCH
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.configMap.name }}
+                key: CASSANDRA_ENDPOINT_SNITCH
+          - name: CASSANDRA_SEEDS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.configMap.name }}
+                key: CASSANDRA_SEEDS
+          - name: MAX_HEAP_SIZE
+            value: {{ .Values.cassandra.config.maxHeapSize | quote }}
+          - name: HEAP_NEWSIZE
+            value: {{ .Values.cassandra.config.heapNewSize | quote }}
+        livenessProbe:
+          exec:
+            command: ["cqlsh", "-e", "describe cluster"]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          exec:
+            command: ["cqlsh", "-e", "describe cluster"]
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        volumeMounts:
+        - name: cassandra-data
+          mountPath: /var/lib/cassandra
+  volumeClaimTemplates:
+  - metadata:
+      name: cassandra-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      {{- if .Values.cassandra.persistence.storageClass }}
+      storageClassName: {{ .Values.cassandra.persistence.storageClass | quote }}
+      {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.cassandra.persistence.size | quote }}

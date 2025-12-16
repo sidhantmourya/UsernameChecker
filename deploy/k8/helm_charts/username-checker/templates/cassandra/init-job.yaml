@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "username-checker.fullname" . }}-cassandra-init
+  labels:
+    {{- include "username-checker.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 600
+  template:
+    metadata:
+      labels:
+        {{- include "username-checker.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: cassandra-init
+        image: "{{ .Values.cassandra.image.repository }}:{{ .Values.cassandra.image.tag }}"
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "Waiting for Cassandra to be ready..."
+          # Using the first pod in the statefulset alias
+          until cqlsh {{ include "username-checker.fullname" . }}-cassandra-0.{{ include "username-checker.fullname" . }}-cassandra.{{ .Release.Namespace }}.svc.cluster.local -e "describe cluster"; do 
+            echo "Cassandra not ready, sleeping..."
+            sleep 5
+          done
+          echo "Creating Keyspace..."
+          echo "CREATE KEYSPACE IF NOT EXISTS {{ .Values.usernameService.env.keyspace }} WITH replication = {'class': 'NetworkTopologyStrategy', '{{ .Values.cassandra.config.dc }}': 3} AND durable_writes = true;" | cqlsh {{ include "username-checker.fullname" . }}-cassandra-0.{{ include "username-checker.fullname" . }}-cassandra.{{ .Release.Namespace }}.svc.cluster.local
+          echo "Keyspace created."
+          
+          echo "Creating Tables..."
+          echo "CREATE TABLE IF NOT EXISTS {{ .Values.usernameService.env.keyspace }}.user (username text PRIMARY KEY, uuid bigint, email text, created_at date);" | cqlsh {{ include "username-checker.fullname" . }}-cassandra-0.{{ include "username-checker.fullname" . }}-cassandra.{{ .Release.Namespace }}.svc.cluster.local
+          echo "Table 'user' created."
+      restartPolicy: OnFailure

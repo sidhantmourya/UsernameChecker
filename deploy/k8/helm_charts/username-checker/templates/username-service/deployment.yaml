@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "username-checker.fullname" . }}-username-service
+  labels:
+    {{- include "username-checker.labels" . | nindent 4 }}
+    app.kubernetes.io/component: username-service
+spec:
+  replicas: {{ .Values.usernameService.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "username-checker.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: username-service
+  template:
+    metadata:
+      labels:
+        {{- include "username-checker.labels" . | nindent 8 }}
+        app.kubernetes.io/component: username-service
+    spec:
+      containers:
+      - name: username-service
+        image: "{{ .Values.usernameService.image.repository }}:{{ .Values.usernameService.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.usernameService.image.pullPolicy }}
+        ports:
+        - containerPort: 8081
+        env:
+        - name: CONTACT_POINTS
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configMap.name }}
+              key: CASSANDRA_SEEDS
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configMap.name }}
+              key: DB_PORT
+        - name: LOCAL_DATACENTER
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configMap.name }}
+              key: CASSANDRA_DC
+        - name: MY_KEYSPACE
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configMap.name }}
+              key: KEYSPACE
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configMap.name }}
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Values.configMap.name }}
+              key: REDIS_PORT
+        - name: SPRING_DATA_CASSANDRA_SCHEMA_ACTION
+          value: {{ .Values.usernameService.env.schemaAction | quote }}
+        livenessProbe:
+          tcpSocket:
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          tcpSocket:
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          {{- toYaml .Values.usernameService.resources | nindent 10 }}

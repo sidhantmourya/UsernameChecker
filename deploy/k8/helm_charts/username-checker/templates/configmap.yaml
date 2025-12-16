@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap.name }}
+  labels:
+    {{- include "username-checker.labels" . | nindent 4 }}
+data:
+  CASSANDRA_CLUSTER_NAME: {{ .Values.cassandra.config.clusterName | quote }}
+  CASSANDRA_DC: {{ .Values.cassandra.config.dc | quote }}
+  CASSANDRA_ENDPOINT_SNITCH: {{ .Values.cassandra.config.endpointSnitch | quote }}
+  # Construct seed list dynamically. Since it's a StatefulSet, names are stable.
+  # We assume the service name is 'cassandra' (or parameterized) and namespace is default or parameterized.
+  # A better production approach is using a headless service DNS for discovery.
+  # For this specific migration, we keep the logic close to original but parameterized.
+  CASSANDRA_SEEDS: "{{ include "username-checker.fullname" . }}-cassandra-0.{{ include "username-checker.fullname" . }}-cassandra.{{ .Release.Namespace }}.svc.cluster.local,{{ include "username-checker.fullname" . }}-cassandra-1.{{ include "username-checker.fullname" . }}-cassandra.{{ .Release.Namespace }}.svc.cluster.local"
+  REDIS_HOST: "{{ include "username-checker.fullname" . }}-redis"
+  REDIS_PORT: {{ .Values.redis.service.port | quote }}
+  DB_PORT: {{ .Values.usernameService.env.dbPort | quote }}
+  KEYSPACE: {{ .Values.usernameService.env.keyspace | quote }}
