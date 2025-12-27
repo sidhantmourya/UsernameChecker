@@ -1,9 +1,20 @@
 server:
   port: 8081
+  address: 0.0.0.0
+
+# application.yml
+bloom:
+  strategy: redis  # Default
+  redis:
+    enabled: true
+  in-memory:
+    enabled: true
+
 
 spring:
   application:
     name: UsernameChecker
+
 
   cassandra:
     contact-points: ${CONTACT_POINTS}

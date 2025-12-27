@@ -3,9 +3,10 @@ package com.user.checker.UsernameChecker.service;
 import com.user.checker.UsernameChecker.component.UserTrie;
 import com.user.checker.UsernameChecker.dto.ResponseDTO;
 import com.user.checker.UsernameChecker.entity.UsersDb;
-import com.user.checker.UsernameChecker.filter.UserNameBloomFilter;
+import com.user.checker.UsernameChecker.factory.BloomFilterFactory;
+import com.user.checker.UsernameChecker.filter.InMemoryBloomFilter;
+import com.user.checker.UsernameChecker.filter.interfaces.BloomFilterIF;
 import com.user.checker.UsernameChecker.repository.UsersDBRepository;
-import com.user.checker.UsernameChecker.repository.UsersDBRepositoryCustom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +27,8 @@ public class UserNameService {
 
     private final UsersDBRepository repository;
     private final RedisTemplate<String, Object> redisTemplate;
-    private final UserNameBloomFilter userNameBloomFilter;
+//    private final InMemoryBloomFilter bloomFilter;
+    private final BloomFilterFactory factory;
     private final UserTrie trie;
     private final ConcurrentLinkedDeque<UsersDb> userBuffer = new ConcurrentLinkedDeque<>();
     private final AtomicBoolean running = new AtomicBoolean(true);
@@ -37,10 +39,11 @@ public class UserNameService {
     private long lastBatchSaveTime = System.currentTimeMillis();
 
 
-    public UserNameService(UsersDBRepository repository, RedisTemplate<String, Object> redisTemplate, UserNameBloomFilter userNameBloomFilter, UserTrie trie) {
+    public UserNameService(UsersDBRepository repository, RedisTemplate<String, Object> redisTemplate, BloomFilterFactory factory, UserTrie trie) {
         this.repository = repository;
         this.redisTemplate = redisTemplate;
-        this.userNameBloomFilter = userNameBloomFilter;
+        this.factory = factory;
+//        this.bloomFilter = inMemoryBloomFilter;
         this.trie = trie;
 
         startBatchProcessor();
@@ -150,9 +153,11 @@ public class UserNameService {
     }
 
 
-    public ResponseDTO checkAndRegisterUser(String username, String email){
+    public ResponseDTO checkAndRegisterUser(String username, String email, String strategy){
 
-        if(userNameBloomFilter.mightContain(username) || redisTemplate.hasKey("userName:"+ username))
+        BloomFilterIF bloomFilter = factory.getFilter(strategy);
+
+        if(bloomFilter.mightContain(username) || redisTemplate.hasKey("userName:"+ username))
         {
             List<String> suggestedUsers = trie.getAllSuggestions(username);
             // Take up to 3 suggestions and join them into a single string
@@ -163,7 +168,7 @@ public class UserNameService {
             List<String> suggestions = new ArrayList<>();
             int i = 0;
             while(suggestions.size()< 3 && i < suggestedUsers.size()) {
-                if (!userNameBloomFilter.mightContain(suggestedUsers.get(i)) && !redisTemplate.hasKey("userName:" + suggestedUsers.get(i))) {
+                if (!bloomFilter.mightContain(suggestedUsers.get(i)) && !redisTemplate.hasKey("userName:" + suggestedUsers.get(i))) {
                     if (!suggestions.contains(suggestedUsers.get(i))) { // Avoid duplicate suggestions
                         suggestions.add(suggestedUsers.get(i));
                     }
@@ -177,7 +182,7 @@ public class UserNameService {
             while (suggestions.size() < 3) {
                 int randomNumber = random.nextInt(999) + 1; // Generates a number between 1 and 999
                 String newUsername = username + randomNumber;
-                if (!userNameBloomFilter.mightContain(newUsername) && !redisTemplate.hasKey("userName:" + newUsername)) {
+                if (!bloomFilter.mightContain(newUsername) && !redisTemplate.hasKey("userName:" + newUsername)) {
                     if (!suggestions.contains(newUsername)) { // Avoid duplicate suggestions
                         trie.insert(newUsername);
                         suggestions.add(newUsername);
@@ -197,7 +202,7 @@ public class UserNameService {
                 "userName:"+ username, username, 10, TimeUnit.MINUTES
         );
 
-        userNameBloomFilter.put(username);
+        bloomFilter.put(username);
         trie.insert(username);
         userBuffer.add(user);
         System.out.println("Users Size: "+ userBuffer.size() + " inserted user: "+ user.getUsername());
